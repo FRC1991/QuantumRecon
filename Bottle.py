@@ -2,6 +2,11 @@ from BaseHTTPServer import HTTPServer
 import SimpleHTTPServer
 import re
 
+"""
+A simple HTTP server I made a few months ago for another project, based off SimpleHTTPServer (https://docs.python.org/2/library/simplehttpserver.html).
+Route methods and error handlers are defined using decorators. Every method is passed a SimpleHTTPRequestHandler which can be used to interact with new requests.
+"""
+
 class BottleHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	def do_GET(self):
 		routes = {regex: func for regex, func in self.server.routes.items() if re.match(regex, self.path)}
