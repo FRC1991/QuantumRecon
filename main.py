@@ -1,16 +1,27 @@
 from Bottle import Bottle
-import girth
+from threading import Thread
+import girth, time
 
-port = 8099
+port = 8092
 server = Bottle(port)
+
+@server.route("\/assets\/.+")
+def asset(req):
+	file = req.path.split("/")[2]
+	try:
+		print file
+		req.respond(open("assets/%s" % file, "r").read())
+	except IOError:
+		req.throw(404)
+
 
 @server.route("\/$")
 def index(req): 
 	req.respond(open("site/index.html", "r").read(), mime = "text/html")
 
-@server.route("/submit")
+@server.route("\/submit\?line=(\d+,)+")
 def submit(req):
-	print req.path
+	print path
 	req.respond("hello men")
 
 try:

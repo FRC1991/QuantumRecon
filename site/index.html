@@ -1,44 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<title>FRC 1991 Recon Updater</title>
 	<link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script type="text/javascript" src="qr/qcode-decoder.min.js"></script>
-	<script type = "text/javascript">
-		window.onload = function() {
-			navigator.getUserMedia({
-				video: true,
-				audio: false
-			}, (stream) => {
-				var video = document.getElementById("webcam");
-				video.src = window.URL.createObjectURL(stream);
-				video.play();
-				var lastLine = null;
-				QCodeDecoder().decodeFromVideo(video, (err, res) => {
-					console.log(res);
-					if (res != lastLine && res != undefined) {
-						//lastLine = res;
-						document.getElementById("csv").value += res + "\n";
-					}
-				});
-			}, (err) => {
-				alert("Some garbage happened: " + err);
-				console.log(err);
-			});
+	<link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style type = "text/css">
+		body {
+			background: #e5e5e5;
+			min-height: 100vh;
 		}
-	</script>
+	</style>
+	<script type = "text/javascript" src = "/assets/qcode-decoder.min.js"></script>
+	<script type = "text/javascript" src = "/assets/main.js"></script>
 </head>
 <body>
+<nav class="nav">
+  <div class="nav-left">
+    <a class="nav-item">FRC 1991</a>
+  </div>
+  <div class="nav-right nav-menu">
+   <a class="nav-item">Successful entries: <span id = "successful-entries">0</span></a>
+    <a class="nav-item">Total entries: <span id = "total-entries">0</span></a>
+    <a class="nav-item">Scanned teams: <span id = "teams">0</span></a>
+    <a class="nav-item">v<span id = "version">0</span></a>
+  </div>
+</nav>
+<br>
 	<div class = "container">
 		<div class = "columns">
 			<div class = "column">
+				<h1 class = "title">Input</h1>
 				<video id = "webcam"></video>
 			</div>
 			<div class = "column">
+				<h1 class = "title">Scan Log</h1>
 				<p class = "control">
-					<textarea id = "csv" disabled class = "textarea" style = "height: 80vh"></textarea>
+					<textarea id = "log" disabled class = "textarea"></textarea>
 				</p>
-				<a class = "button is-danger" onclick = "document.getElementById('csv').value = ''">Clear</a>
+				<a class = "button is-danger" onclick = "document.getElementById('log').value = ''">Clear</a>
 			</div>
 		</div>
 	</div>
