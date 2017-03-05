@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.2/css/bulma.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script type="text/javascript" src="qr/qcode-decoder.min.js"></script>
+	<script type = "text/javascript">
+		window.onload = function() {
+			navigator.getUserMedia({
+				video: true,
+				audio: false
+			}, (stream) => {
+				var video = document.getElementById("webcam");
+				video.src = window.URL.createObjectURL(stream);
+				video.play();
+				var lastLine = null;
+				QCodeDecoder().decodeFromVideo(video, (err, res) => {
+					console.log(res);
+					if (res != lastLine && res != undefined) {
+						//lastLine = res;
+						document.getElementById("csv").value += res + "\n";
+					}
+				});
+			}, (err) => {
+				alert("Some garbage happened: " + err);
+				console.log(err);
+			});
+		}
+	</script>
+</head>
+<body>
+	<div class = "container">
+		<div class = "columns">
+			<div class = "column">
+				<video id = "webcam"></video>
+			</div>
+			<div class = "column">
+				<p class = "control">
+					<textarea id = "csv" disabled class = "textarea" style = "height: 80vh"></textarea>
+				</p>
+				<a class = "button is-danger" onclick = "document.getElementById('csv').value = ''">Clear</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
