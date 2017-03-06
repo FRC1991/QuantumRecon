@@ -1,7 +1,40 @@
 let version = "1.0";
+var entries = 0;
+var successfulEntries = 0;
+
+function incrementEntries(success) {
+	entries++;
+	if (success) successfulEntries++;
+	document.getElementById("total-entries").innerHTML = entries;
+	document.getElementById('successful-entries').innerHTML = successfulEntries;
+}
+
+function log(msg, red) {
+	var row = document.createElement("span");
+	if (red) row.style = "color: red;";
+	var br = document.createElement("br");
+	var log = document.getElementById("log");
+	row.innerHTML = msg;
+	log.insertBefore(br, log.firstChild);
+	log.insertBefore(row, log.firstChild);
+}
 
 function submit(line) {
-	document.getElementById("log").value += line + "\n";
+	log(line);
+	var req = new XMLHttpRequest();
+	req.open("GET", "/submit?line=" + encodeURI(line));
+	req.onreadystatechange = function() {
+		if(req.readyState == 4) {
+			if (req.status == 200) {
+				incrementEntries(true);
+			}
+			else {
+				log("Failed to submit: " + req.response, true);
+				incrementEntries(false);
+			}
+		}
+	}
+	req.send();
 }
 
 window.onload = function() {
@@ -25,7 +58,7 @@ window.onload = function() {
 				team = text.split(",")[0];
 			}
 			catch (err) {
-				alert("Scanned code not in correct format - team not found: " + text);
+				log("Scanned code not in correct format - team not found: " + text, true);
 				return;
 			}
 			if (team != lastTeam) {
@@ -34,7 +67,7 @@ window.onload = function() {
 				}
 			});
 	}, (err) => {
-		alert("Some garbage happened: " + err);
+		log("Some garbage happened: " + err, true);
 		console.log(err);
 	});
 }

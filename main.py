@@ -1,15 +1,14 @@
 from Bottle import Bottle
 from threading import Thread
-import girth, time
+import girth, time, urllib
 
-port = 8092
+port = 8080
 server = Bottle(port)
 
 @server.route("\/assets\/.+")
 def asset(req):
 	file = req.path.split("/")[2]
 	try:
-		print file
 		req.respond(open("assets/%s" % file, "r").read())
 	except IOError:
 		req.throw(404)
@@ -21,8 +20,12 @@ def index(req):
 
 @server.route("\/submit\?line=(\d+,)+")
 def submit(req):
-	print path
-	req.respond("hello men")
+	line = urllib.unquote(req.path[13:])
+	output = girth.excellInputer(line)
+	if output == True:
+		req.respond("yessssss")
+	else:
+		req.respond(output, code = 500)
 
 try:
 	server.serve_forever()

@@ -138,12 +138,6 @@ def excellInputer( parsedString ) :
 	except Exception as e :
 		print(e)
 		return e
-	
-
-
-
-
-
 
 
 
