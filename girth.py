@@ -96,7 +96,7 @@ def excellInputer( parsedString ) :
 			print(wsTeam.title + " is not in TeamList.")
 			print(wbTeam.sheetnames)
 		elif(countTeam) :
-			wsMatch = wbTeam[teamNum]
+			wsTeam = wbTeam[teamNum]
 			print(wsTeam.title + " is in TeamList.")
 			print(wbTeam.sheetnames)
 			
